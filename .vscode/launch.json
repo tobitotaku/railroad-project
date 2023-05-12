@@ -8,7 +8,7 @@
             "name": "Python: test.py",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "test.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": ["-v"]
