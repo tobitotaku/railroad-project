@@ -1,7 +1,8 @@
 from itertools import permutations
-from itertools import combinations_with_replacement
 
 class RailNetwork():
+    min_len = 1
+    max_len = 1
 
     def __init__(self, graph):
         self.graph: list = graph
@@ -32,7 +33,7 @@ class RailNetwork():
         if _distance < 0:
             distance = 'NO SUCH ROUTE'
         else:
-            distance = str(_distance)
+            distance = int(_distance)
         return distance
 
     def find_available_routes(self):
@@ -57,3 +58,7 @@ class RailNetwork():
     
     def count_available_routes(self):
         return len(self.find_available_routes())
+
+    def find_shortest_route(self):
+        routes = self.find_available_routes()
+        return min(routes.values())
