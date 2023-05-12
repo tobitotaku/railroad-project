@@ -27,7 +27,7 @@ class RailNetwork():
             distance = str(_distance)
         return distance
 
-    def find_a_route(self, town1, town2, max_stops, route = ''):
+    def find_a_route_max_stops(self, town1, town2, max_stops, route = ''):
         # exit when after max_stops is reached
         if len(route) == max_stops + 1:
             # return empty string if town2 is not reached
@@ -59,7 +59,7 @@ class RailNetwork():
         if len(vect) > 1:
             route += vect[1]
             self.visited_routes.append(vect)
-        return self.find_a_route(town1, town2, max_stops, route)
+        return self.find_a_route_max_stops(town1, town2, max_stops, route)
     
     def reset_visited_routes(self):
         self.visited_routes = []
@@ -69,12 +69,50 @@ class RailNetwork():
         count = 0
         self.reset_visited_routes()
         while has_route:
-            route = self.find_a_route(town1, town2, max_stops)
+            route = self.find_a_route_max_stops(town1, town2, max_stops)
             if route:
                 count += 1
             else:
                 has_route = False
         return count
+    
+    def find_a_route_exact_stops(self, town1, town2, exact_stops, route = '', ):
+        # exit when after exact_stops is reached
+        if len(route) > exact_stops + 1:
+            return ''
+        
+        # exit when town2 is reached
+        if len(route) > 0 and town2 == route[len(route) - 1] and len(route) == exact_stops + 1:
+            return route
+            
+        # start route to town1 if route is empty
+        if len(route) == 0: route = town1
+
+        # find next town
+        vect = next(
+            filter(
+                # filter by current town and exclude route
+                lambda vect: vect[0] == route[len(route) - 1] \
+                    and vect not in self.visited_routes,
+                self.graph
+            ),
+            '' # return empty string if no route found
+        )
+        if len(vect) > 1:
+            route += vect[1]
+            self.visited_routes.append(vect)
+        return self.find_a_route_exact_stops(town1, town2, exact_stops, route)
+
+    def count_routes_with_exact_stops(self, town1, town2, exact_stops):
+        has_route = True
+        count = 0
+        self.reset_visited_routes()
+        while has_route:
+            route = self.find_a_route_max_stops(town1, town2, exact_stops)
+            if route:
+                count += 1
+            else:
+                has_route = False
         
     def get_track(self, node1, node2):
         track = ''

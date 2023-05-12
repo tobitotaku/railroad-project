@@ -60,6 +60,15 @@ class TestRailNetwork(unittest.TestCase):
     def test_count_routes_C_to_C(self):
         self.assertEqual(self.railnetwork.count_routes_with_max_stops('C', 'C', 3), 2)
 
+    # sections: find route A to C, exact stops 4
+    # expect route ABCDC
+    def test_find_route_ABCDC(self):
+        self.assertEqual(self.railnetwork.find_a_route_exact_stops('A', 'C', 4), 'ABCDC')
+
+    # section: count all routes with exact stops 4 from town A to C
+    # def test_count_routes_A_to_C(self):
+    #     self.assertEqual(self.railnetwork.count_routes_with_exact_stops('A', 'C', 4), 3)
+
 if __name__ == '__main__':
     unittest.main()
 
