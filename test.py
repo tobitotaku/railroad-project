@@ -45,5 +45,9 @@ class TestRailNetwork(unittest.TestCase):
         self.railnetwork.setup('B', 'B', 1, 4)
         self.assertEqual(self.railnetwork.find_shortest_route(), 9)
 
+    def test_count_routes_by_distance_C_to_C(self):
+        self.railnetwork.setup('C', 'C', 1, 10)
+        self.assertEqual(self.railnetwork.count_routes_by_distance(30), 4)
+
 if __name__ == '__main__':
     unittest.main()

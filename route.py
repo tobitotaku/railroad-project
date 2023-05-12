@@ -62,3 +62,11 @@ class RailNetwork():
     def find_shortest_route(self):
         routes = self.find_available_routes()
         return min(routes.values())
+    
+    def find_routes_by_distance(self, distance):
+        routes = self.find_available_routes()
+        return filter(lambda route: routes[route] < distance, routes.keys())
+    
+    def count_routes_by_distance(self, distance):
+        routes = self.find_routes_by_distance(distance)
+        return len(list(routes))
