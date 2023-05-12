@@ -35,6 +35,12 @@ class TestRailNetwork(unittest.TestCase):
         routes = 'AED'
         self.assertEqual(self.railnetwork.get_distance_by_routes(routes), 'NO SUCH ROUTE')
 
+    def test_find_route_CDC(self):
+        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), 'CDC')
+
+    def test_find_route_CEBC(self):
+        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3, ['CD8']), 'CEBC')
+
 if __name__ == '__main__':
     unittest.main()
 
