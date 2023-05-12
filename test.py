@@ -40,11 +40,18 @@ class TestRailNetwork(unittest.TestCase):
 
     def test_route_is_visited_yes(self):
         self.railnetwork.visited_routes = ['CDCDC']
-        self.assertEqual(self.railnetwork.route_is_visited('CDC'), True)
+        self.assertEqual(self.railnetwork.track_is_visited('CDC'), True)
 
     def test_route_is_visited_no(self):
         self.railnetwork.visited_routes = ['CEBC']
-        self.assertEqual(self.railnetwork.route_is_visited('CDC'), False)
+        self.assertEqual(self.railnetwork.track_is_visited('CDC'), False)
+    
+    def test_get_next_town(self):
+        self.assertEqual(self.railnetwork.get_next_track_to_town('AB'), 'BC4')
+
+    def test_get_next_town_route_visited(self):
+        self.railnetwork.visited_routes = ['CDC']
+        self.assertEqual(self.railnetwork.get_next_track_to_town('C'), 'CE2')
 
     # find route CDC, max stops 3
     # def test_find_route_CDC(self):

@@ -46,7 +46,7 @@ class RailNetwork():
         if len(route) == 0: route = town1
 
         # find next town
-        vect = self.get_next_town(route)
+        vect = self.get_next_track_to_town(route)
         if len(vect) > 1:
             route += vect[1]
         return self.find_a_route_max_stops(town1, town2, max_stops, route)
@@ -80,23 +80,25 @@ class RailNetwork():
         if len(route) == 0: route = town1
 
         # find next town
-        vect = self.get_next_town(route)
-        if len(vect) > 1:
-            route += vect[1]
+        track = self.get_next_track_to_town(route)
+        if len(track) > 1:
+            route += track[1]
         return self.find_a_route_exact_stops(town1, town2, exact_stops, route)
 
-    def get_next_town(self, route):
+    def get_next_track_to_town(self, route):
         return next(
             filter(
-                # filter by current town and exclude route
-                lambda vect: vect[0] == route[len(route) - 1] \
-                    and self.is_route_visited(route),
+                lambda vect: 
+                    # match next town with last town in route, i.e. AB to BC, C is next town
+                    vect[0] == route[len(route) - 1]
+                    and not self.track_is_visited(vect[0:2])
+                    ,
                 self.graph
             ),
             '' # return empty string if no route found
         )
 
-    def route_is_visited(self, route):
+    def track_is_visited(self, route):
         is_visited = route in next(
                         filter(
                             lambda visited_route: 
