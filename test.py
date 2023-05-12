@@ -35,6 +35,14 @@ class TestRailNetwork(unittest.TestCase):
         routes = 'AED'
         self.assertEqual(self.railnetwork.get_distance_by_routes(routes), 'NO SUCH ROUTE')
 
+    def test_count_routes_C_to_C(self):
+        self.railnetwork.setup('C', 'C', 1, 4)
+        self.assertEqual(self.railnetwork.count_available_routes(), 4)
+
+    def test_count_routes_A_to_C(self):
+        self.railnetwork.setup('A', 'C', 4, 4)
+        self.assertEqual(self.railnetwork.count_available_routes(), 3)
+
 if __name__ == '__main__':
     unittest.main()
 

@@ -1,9 +1,18 @@
-
+from itertools import permutations
+from itertools import combinations_with_replacement
 
 class RailNetwork():
 
     def __init__(self, graph):
         self.graph: list = graph
+    
+    def setup(self, start_town, end_town, min_stops = 1, max_stops = 10):
+        self.start_town = start_town
+        self.end_town = end_town
+        if min_stops < 1:
+            min_stops = 1
+        self.min_len = min_stops + 1
+        self.max_len = max_stops + 1
     
     def get_distance_by_routes(self, routes) -> int:
         _distance = 0
@@ -24,15 +33,31 @@ class RailNetwork():
             distance = 'NO SUCH ROUTE'
         else:
             distance = str(_distance)
-        print(f"distance = {distance}")
         return distance
 
-    def get_shortest_route(self, node1, node2):
-        track = ''
-        for vect in self.graph:
-            # todo
-            pass
-        return track
+    def find_available_routes(self):
+        available_routes = {}
+        characters = 'ABCDE'
+        characters_len = len(characters)
+            
+        for n_stops in range(self.min_len, self.max_len + 1):
+            if n_stops == 2:
+                route = self.start_town + self.end_town
+                distance = self.get_distance_by_routes(route)
+                if distance != 'NO SUCH ROUTE':
+                    available_routes[route] = distance
+            else:
+                all_possible_routes = permutations(characters * characters_len, n_stops - 2)
+                for route_tuple in all_possible_routes:
+                    route = self.start_town + ''.join(route_tuple) + self.end_town
+                    distance = self.get_distance_by_routes(route)
+                    if distance != 'NO SUCH ROUTE':
+                        available_routes[route] = distance
+        return available_routes
+    
+    def count_available_routes(self):
+        return len(self.find_available_routes())
+
     
     def get_track(self, node1, node2):
         track = ''
