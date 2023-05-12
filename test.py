@@ -39,20 +39,25 @@ class TestRailNetwork(unittest.TestCase):
         routes = 'AED'
         self.assertEqual(self.railnetwork.get_distance_by_routes(routes), 'NO SUCH ROUTE')
 
+    # find route CDC, max stops 3
     def test_find_route_CDC(self):
-        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), 'CDC')
+        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CDC')
 
+    # find route CEBC, max stops 3
     def test_find_route_CEBC(self):
+        # route CDC is already visited
         self.railnetwork.visited_routes = ['CD8']
-        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), 'CEBC')
+        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CEBC')
 
+    # find route town C to C, max stops 3
+    # test prevent town of origin == town of destination, i.e. result route = 'C' 
     def test_find_route_C(self):
-        # test prevent town of origin == town of destination
+        # route CDC and CEBC is already visited
         self.railnetwork.visited_routes = ['CD8', 'CE2']
-        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), '')
+        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), '')
 
+    # count all routes with max stops from town C to C
     def test_count_routes_C_to_C(self):
-        # count all routes with max stops
         self.assertEqual(self.railnetwork.count_routes_with_max_stops('C', 'C', 3), 2)
 
 if __name__ == '__main__':
