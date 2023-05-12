@@ -33,14 +33,13 @@ class RailNetwork():
             # return empty string if town2 is not reached
             if len(route) > 0 and town2 != route[len(route) - 1]:
                 return ''
-            else:
-                return route
         # exit when town2 is reached
         if len(route) > 0 and town2 == route[len(route) - 1]:
             # don't return route if it only has 1 town, i.e. town1 == town2
             if len(route) == 1:
                 return ''
             else:
+                self.visited_routes.append(route)
                 return route
             
         # start route to town1 if route is empty
@@ -50,7 +49,6 @@ class RailNetwork():
         vect = self.get_next_town(route)
         if len(vect) > 1:
             route += vect[1]
-            self.visited_routes.append(vect)
         return self.find_a_route_max_stops(town1, town2, max_stops, route)
     
     def reset_visited_routes(self):
@@ -75,6 +73,7 @@ class RailNetwork():
 
         # exit when town2 is reached
         if len(route) > 0 and town2 == route[len(route) - 1] and len(route) == exact_stops + 1:
+            self.visited_routes.append(route)
             return route
             
         # start route to town1 if route is empty
@@ -84,7 +83,6 @@ class RailNetwork():
         vect = self.get_next_town(route)
         if len(vect) > 1:
             route += vect[1]
-            self.visited_routes.append(vect)
         return self.find_a_route_exact_stops(town1, town2, exact_stops, route)
 
     def get_next_town(self, route):
@@ -92,11 +90,22 @@ class RailNetwork():
             filter(
                 # filter by current town and exclude route
                 lambda vect: vect[0] == route[len(route) - 1] \
-                    and vect not in self.visited_routes,
+                    and self.is_route_visited(route),
                 self.graph
             ),
             '' # return empty string if no route found
         )
+
+    def route_is_visited(self, route):
+        is_visited = route in next(
+                        filter(
+                            lambda visited_route: 
+                                route in visited_route,
+                            self.visited_routes
+                        ),
+                        ''
+                    )
+        return is_visited
 
     def count_routes_with_exact_stops(self, town1, town2, exact_stops):
         has_route = True
