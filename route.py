@@ -27,11 +27,7 @@ class RailNetwork():
             distance = str(_distance)
         return distance
 
-    def find_a_route(self, town1, town2, max_stops, visited_routes = [], route = ''):
-        # merge once visited_routes from external parameter
-        if len(visited_routes) > 0:
-            self.visited_routes += visited_routes
-
+    def find_a_route(self, town1, town2, max_stops, route = ''):
         # exit when after max_stops is reached
         if len(route) == max_stops + 1:
             # return empty string if town2 is not reached
@@ -41,9 +37,13 @@ class RailNetwork():
                 return route
         # exit when town2 is reached
         if len(route) > 0 and town2 == route[len(route) - 1]:
-            return route
+            # don't return route if it only has 1 town, i.e. town1 == town2
+            if len(route) == 1:
+                return ''
+            else:
+                return route
             
-        # set current_town to town1 if current_town is empty
+        # start route to town1 if route is empty
         if len(route) == 0: route = town1
 
         # find next town
@@ -59,14 +59,18 @@ class RailNetwork():
         if len(vect) > 1:
             route += vect[1]
             self.visited_routes.append(vect)
-        return self.find_a_route(town1, town2, max_stops, [], route)
+        return self.find_a_route(town1, town2, max_stops, route)
     
-    def count_routes_with_max_stops(self, town1, town2, max_stops, ):
+    def reset_visited_routes(self):
+        self.visited_routes = []
+
+    def count_routes_with_max_stops(self, town1, town2, max_stops):
         has_route = True
         count = 0
+        self.reset_visited_routes()
         while has_route:
-            route = self.find_a_route(town1, town2, max_stops, self.visited_routes)
-            if len(route) > 0:
+            route = self.find_a_route(town1, town2, max_stops)
+            if route:
                 count += 1
             else:
                 has_route = False

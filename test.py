@@ -8,6 +8,10 @@ class TestRailNetwork(unittest.TestCase):
     def setUp(self) -> None:
         self.graph = ['AB5', 'BC4', 'CD8', 'DC8', 'DE6', 'AD5', 'CE2', 'EB3', 'AE7']
         self.railnetwork  = RailNetwork(self.graph)
+        self.railnetwork.reset_visited_routes()
+
+    def tearDown(self) -> None:
+        return super().tearDown()
 
     def test_get_track(self):
         node1 = 'A'
@@ -39,7 +43,17 @@ class TestRailNetwork(unittest.TestCase):
         self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), 'CDC')
 
     def test_find_route_CEBC(self):
-        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3, ['CD8']), 'CEBC')
+        self.railnetwork.visited_routes = ['CD8']
+        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), 'CEBC')
+
+    def test_find_route_C(self):
+        # test prevent town of origin == town of destination
+        self.railnetwork.visited_routes = ['CD8', 'CE2']
+        self.assertEqual(self.railnetwork.find_a_route('C', 'C', 3), '')
+
+    def test_count_routes_C_to_C(self):
+        # count all routes with max stops
+        self.assertEqual(self.railnetwork.count_routes_with_max_stops('C', 'C', 3), 2)
 
 if __name__ == '__main__':
     unittest.main()
