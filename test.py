@@ -9,12 +9,6 @@ class TestRailNetwork(unittest.TestCase):
         self.graph = ['AB5', 'BC4', 'CD8', 'DC8', 'DE6', 'AD5', 'CE2', 'EB3', 'AE7']
         self.railnetwork  = RailNetwork(self.graph)
 
-    def test_get_track(self):
-        node1 = 'A'
-        node2 = 'B'
-        track = self.railnetwork.get_track(node1, node2)
-        self.assertEqual(track, 'AB5')
-
     def test_input1(self):
         routes = 'ABC'
         self.assertEqual(self.railnetwork.get_distance_by_routes(routes), '9')

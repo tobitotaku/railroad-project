@@ -21,7 +21,7 @@ class RailNetwork():
             # pass
             node1 = routes[r]
             node2 = routes[r + 1]
-            track = self.get_track(node1, node2)
+            track = next((track for track in self.graph if track[0] == node1 and track[1] == node2), '')
             if track:
                 _distance += int(track[2])
             else:
@@ -57,12 +57,3 @@ class RailNetwork():
     
     def count_available_routes(self):
         return len(self.find_available_routes())
-
-    
-    def get_track(self, node1, node2):
-        track = ''
-        for vect in self.graph:
-            if vect[0] == node1 and vect[1] == node2:
-                track = vect
-        return track
-
