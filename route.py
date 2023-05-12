@@ -47,15 +47,7 @@ class RailNetwork():
         if len(route) == 0: route = town1
 
         # find next town
-        vect = next(
-            filter(
-                # filter by current town and exclude route
-                lambda vect: vect[0] == route[len(route) - 1] \
-                    and vect not in self.visited_routes,
-                self.graph
-            ),
-            '' # return empty string if no route found
-        )
+        vect = self.get_next_town(route)
         if len(vect) > 1:
             route += vect[1]
             self.visited_routes.append(vect)
@@ -80,7 +72,7 @@ class RailNetwork():
         # exit when after exact_stops is reached
         if len(route) > exact_stops + 1:
             return ''
-        
+
         # exit when town2 is reached
         if len(route) > 0 and town2 == route[len(route) - 1] and len(route) == exact_stops + 1:
             return route
@@ -89,7 +81,14 @@ class RailNetwork():
         if len(route) == 0: route = town1
 
         # find next town
-        vect = next(
+        vect = self.get_next_town(route)
+        if len(vect) > 1:
+            route += vect[1]
+            self.visited_routes.append(vect)
+        return self.find_a_route_exact_stops(town1, town2, exact_stops, route)
+
+    def get_next_town(self, route):
+        return next(
             filter(
                 # filter by current town and exclude route
                 lambda vect: vect[0] == route[len(route) - 1] \
@@ -98,10 +97,6 @@ class RailNetwork():
             ),
             '' # return empty string if no route found
         )
-        if len(vect) > 1:
-            route += vect[1]
-            self.visited_routes.append(vect)
-        return self.find_a_route_exact_stops(town1, town2, exact_stops, route)
 
     def count_routes_with_exact_stops(self, town1, town2, exact_stops):
         has_route = True
