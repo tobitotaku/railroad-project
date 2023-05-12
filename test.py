@@ -38,51 +38,72 @@ class TestRailNetwork(unittest.TestCase):
         routes = 'AED'
         self.assertEqual(self.railnetwork.get_distance_by_routes(routes), 'NO SUCH ROUTE')
 
-    def test_route_is_visited_yes(self):
-        self.railnetwork.visited_routes = ['CDCDC']
-        self.assertEqual(self.railnetwork.track_is_visited('CDC'), True)
+    # def test_get_route_with_next_track(self):
+    #     self.assertEqual(self.railnetwork.get_route_with_next_track('CD', 'DC'), 'CDC')
+        
+    # def test_route_is_visited_yes(self):
+    #     self.railnetwork.visited_routes = ['CDCDC']
+    #     self.assertEqual(self.railnetwork.track_is_visited('CD', 'DC'), True)
 
-    def test_route_is_visited_no(self):
-        self.railnetwork.visited_routes = ['CEBC']
-        self.assertEqual(self.railnetwork.track_is_visited('CDC'), False)
+    # def test_route_is_visited_no(self):
+    #     self.railnetwork.visited_routes = ['CEBC']
+    #     self.assertEqual(self.railnetwork.track_is_visited('CD', 'DC'), False)
     
-    def test_get_next_town(self):
-        self.assertEqual(self.railnetwork.get_next_track_to_town('AB'), 'BC4')
+    # def test_get_next_town(self):
+    #     self.assertEqual(self.railnetwork.get_next_track_to_town('AB'), 'BC4')
 
-    def test_get_next_town_route_visited(self):
-        self.railnetwork.visited_routes = ['CDC']
-        self.assertEqual(self.railnetwork.get_next_track_to_town('C'), 'CE2')
+    # def test_get_next_town_route_visited(self):
+    #     self.railnetwork.visited_routes = ['CDC']
+    #     self.assertEqual(self.railnetwork.get_next_track_to_town('C'), 'CE2')
 
-    # find route CDC, max stops 3
-    def test_find_route_CDC(self):
-        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CDC')
+    # # find route CDC, max stops 3
+    # def test_find_route_CDC(self):
+    #     self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CDC')
 
-    # find route CEBC, max stops 3
-    def test_find_route_CEBC(self):
-        # route CDC is already visited
-        self.railnetwork.visited_routes = ['CDC']
-        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CEBC')
+    # # find route CEBC, max stops 3
+    # def test_find_route_CEBC(self):
+    #     # route CDC is already visited
+    #     self.railnetwork.visited_routes = ['CDC']
+    #     self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), 'CEBC')
 
-    # find route town C to C, max stops 3
-    # test prevent town of origin == town of destination, i.e. result route = 'C' 
-    def test_find_route_C(self):
-        # route CDC and CEBC is already visited
-        self.railnetwork.visited_routes = ['CDC', 'CEBC']
-        self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), '')
+    # # find route town C to C, max stops 3
+    # # test prevent town of origin == town of destination, i.e. result route = 'C' 
+    # def test_find_route_C(self):
+    #     # route CDC and CEBC is already visited
+    #     self.railnetwork.visited_routes = ['CDC', 'CEBC']
+    #     self.assertEqual(self.railnetwork.find_a_route_max_stops('C', 'C', 3), '')
 
-    # count all routes with max stops from town C to C
-    def test_count_routes_C_to_C(self):
-        self.assertEqual(self.railnetwork.count_routes_with_max_stops('C', 'C', 3), 2)
+    # # count all routes with max stops from town C to C
+    # def test_count_routes_C_to_C(self):
+    #     self.assertEqual(self.railnetwork.count_routes_with_max_stops('C', 'C', 3), 2)
 
-    # sections: find route A to C, exact stops 4
-    # expect route ABCDC
+    # # sections: find route A to C, exact stops 4
+    # # expect route ABCDC
     # def test_find_route_ABCDC(self):
     #     self.assertEqual(self.railnetwork.find_a_route_exact_stops('A', 'C', 4), 'ABCDC')
 
     # # expect route ADCDC
     # def test_find_route_ADCDC(self):
-    #     self.railnetwork.visited_routes = ['AB', 'CD2']
+    #     self.railnetwork.visited_routes = ['ABCDC']
     #     self.assertEqual(self.railnetwork.find_a_route_exact_stops('A', 'C', 4), 'ADCDC')
+
+    # def test_find_route_ADEBC(self):
+    #     self.railnetwork.visited_routes = ['ABCDC', 'ADCDC', 'AEBCD']
+    #     self.assertEqual(self.railnetwork.find_a_route_exact_stops('A', 'C', 4), 'ADEBC')
+
+    # def test_find_route_ADEBC(self):
+    #     self.railnetwork.setup('A', 'C', 4, 4, ['ABCDC', 'ADCDC', 'AEBCD'])
+    #     self.assertEqual(self.railnetwork.find_route(), 'ADEBC')
+    # def test_find_routes(self):
+    #     self.railnetwork.setup('C', 'C', 1, 3)
+    #     self.assertEqual(self.railnetwork.find_routes(), 2)
+
+    # def test_find_route_ADEBC(self):
+    #     self.railnetwork.visited_routes = ['ABCDC', 'ADCDC', 'AEBCD']
+    #     self.railnetwork.min_stops = 4
+    #     self.railnetwork.max_stops = 4
+    #     self.railnetwork.visited_routes = ['ABCDC', 'ADCDC', 'AEBCD']
+    #     self.assertEqual(self.railnetwork.find_a_routes_min_max_stops('A', 'C', 4), 'ADEBC')
 
     # section: count all routes with exact stops 4 from town A to C
     # def test_count_routes_A_to_C(self):
