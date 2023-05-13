@@ -5,7 +5,8 @@ import unittest
 class TestRailNetwork(unittest.TestCase):
     
     def setUp(self) -> None:
-        self.graph = ['AB5', 'BC4', 'CD8', 'DC8', 'DE6', 'AD5', 'CE2', 'EB3', 'AE7']
+        with open('input.txt', encoding="utf-8") as f:
+            self.graph = f.read().splitlines()
         self.railnetwork  = RailNetwork(self.graph)
 
     # test distance route ABC
