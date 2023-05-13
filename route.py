@@ -35,21 +35,28 @@ class RailNetwork():
         return distance
 
     def find_all_routes_with_towns(self, towns, route = '', routes: list = []):
+        # set start town as initial town
         if len(route) == 0:
+            routes = []
             route += self.start_town
+        # if route is not empty and route is valid, add route to routes
         if len(route) > 1 \
             and route[0] == self.start_town \
             and route[-1] == self.end_town \
             and len(route) == towns:
                 routes.append(route)
                 return routes
+        # if route is not empty and route is invalid, return routes
         elif len(route) == towns:
             return routes
         i = 0
         while i < len(self.graph):
             next_town = ''
+            # if last town in route is the same as the first town in a track, add the second town in the track to route
             if route[-1] == self.graph[i][0]:
                 next_town = self.graph[i][1]
+            
+            # if next town is not empty, find all routes with next town
             if next_town:
                 self.find_all_routes_with_towns(towns, route + next_town, routes)
             i += 1
@@ -58,30 +65,28 @@ class RailNetwork():
     def find_available_routes(self):
         available_routes = {}
         for n in range(self.min_len, self.max_len + 1):
-            if n == 2:
-                route = self.start_town + self.end_town
+            # find all possible routes with n towns
+            all_possible_routes = self.find_all_routes_with_towns(n)
+            for route in all_possible_routes:
                 distance = self.get_distance_by_routes(route)
                 if distance != 'NO SUCH ROUTE':
                     available_routes[route] = distance
-            else:
-                all_possible_routes = self.find_all_routes_with_towns(n, routes = [])
-                for route in all_possible_routes:
-                    distance = self.get_distance_by_routes(route)
-                    if distance != 'NO SUCH ROUTE':
-                        available_routes[route] = distance
         return available_routes
     
     def count_available_routes(self):
         return len(self.find_available_routes())
 
+    # find shortest route where keys are routes and values in dict are distances
     def find_shortest_route(self):
         routes = self.find_available_routes()
         return min(routes.values())
     
+    # find routes with distance less than given distance
     def find_routes_by_distance(self, distance):
         routes = self.find_available_routes()
         return filter(lambda route: routes[route] < distance, routes.keys())
     
+    # count routes with distance less than given distance
     def count_routes_by_distance(self, distance):
         routes = self.find_routes_by_distance(distance)
         return len(list(routes))
