@@ -1,5 +1,3 @@
-from itertools import permutations
-
 class RailNetwork():
     min_len = 1
     max_len = 1
@@ -36,21 +34,38 @@ class RailNetwork():
             distance = int(_distance)
         return distance
 
+    def find_all_routes_with_towns(self, towns, route = '', routes: list = []):
+        if len(route) == 0:
+            route += self.start_town
+        if len(route) > 1 \
+            and route[0] == self.start_town \
+            and route[-1] == self.end_town \
+            and len(route) == towns:
+                routes.append(route)
+                return routes
+        elif len(route) == towns:
+            return routes
+        i = 0
+        while i < len(self.graph):
+            next_town = ''
+            if route[-1] == self.graph[i][0]:
+                next_town = self.graph[i][1]
+            if next_town:
+                self.find_all_routes_with_towns(towns, route + next_town, routes)
+            i += 1
+        return routes
+
     def find_available_routes(self):
         available_routes = {}
-        characters = 'ABCDE'
-        characters_len = len(characters)
-            
-        for n_stops in range(self.min_len, self.max_len + 1):
-            if n_stops == 2:
+        for n in range(self.min_len, self.max_len + 1):
+            if n == 2:
                 route = self.start_town + self.end_town
                 distance = self.get_distance_by_routes(route)
                 if distance != 'NO SUCH ROUTE':
                     available_routes[route] = distance
             else:
-                all_possible_routes = permutations(characters * characters_len, n_stops - 2)
-                for route_tuple in all_possible_routes:
-                    route = self.start_town + ''.join(route_tuple) + self.end_town
+                all_possible_routes = self.find_all_routes_with_towns(n, routes = [])
+                for route in all_possible_routes:
                     distance = self.get_distance_by_routes(route)
                     if distance != 'NO SUCH ROUTE':
                         available_routes[route] = distance
@@ -70,3 +85,4 @@ class RailNetwork():
     def count_routes_by_distance(self, distance):
         routes = self.find_routes_by_distance(distance)
         return len(list(routes))
+    
